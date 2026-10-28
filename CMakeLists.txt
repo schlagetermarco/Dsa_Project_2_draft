@@ -8,4 +8,6 @@ add_executable(Project main.cpp
         MaxHeap.cpp
         MaxHeap.h
         Song.cpp
-        Song.h)
+        Song.h
+        MergeSort.cpp
+        MergeSort.h)
