@@ -10,4 +10,6 @@ add_executable(Project main.cpp
         Song.cpp
         Song.h
         MergeSort.cpp
-        MergeSort.h)
+        MergeSort.h
+        DataSetReader.cpp
+        DataSetReader.h)
