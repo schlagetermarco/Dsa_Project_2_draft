@@ -12,4 +12,6 @@ add_executable(Project main.cpp
         MergeSort.cpp
         MergeSort.h
         DataSetReader.cpp
-        DataSetReader.h)
+        DataSetReader.h
+        RecommendationSystem.cpp
+        RecommendationSystem.h)
