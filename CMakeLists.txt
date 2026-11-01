@@ -2,8 +2,9 @@ cmake_minimum_required(VERSION 4.3)
 project(Project)
 
 set(CMAKE_CXX_STANDARD 20)
+find_package(Qt6 REQUIRED COMPONENTS Widgets)
 
-add_executable(Project main.cpp
+add_executable(Project
         main.cpp
         MaxHeap.cpp
         MaxHeap.h
@@ -14,4 +15,7 @@ add_executable(Project main.cpp
         DataSetReader.cpp
         DataSetReader.h
         RecommendationSystem.cpp
-        RecommendationSystem.h)
+        RecommendationSystem.h
+        MainMenu.cpp
+        MainMenu.h)
+target_link_libraries(Project PRIVATE Qt6::Widgets)
