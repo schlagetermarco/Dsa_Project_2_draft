@@ -17,5 +17,9 @@ add_executable(Project
         RecommendationSystem.cpp
         RecommendationSystem.h
         MainMenu.cpp
-        MainMenu.h)
+        MainMenu.h
+        Sidebar.cpp
+        Sidebar.h
+        DiscoverPage.cpp
+        DiscoverPage.h)
 target_link_libraries(Project PRIVATE Qt6::Widgets)
