@@ -71,5 +71,19 @@ DiscoverPage::DiscoverPage(QWidget *parent):QWidget(parent) {
     recommendButton->setFixedHeight(48);
     recommendButton->setCursor(Qt::PointingHandCursor);
     discoverLayout->addWidget(recommendButton);
+    discoverLayout->addStretch();
+    setStyleSheet("QLabel{ color:#F8FAFC; background:transparent}"
+
+                  "QComboBox{background-color:#21190F;color:F8FAFC; border: 1px solid rgba(245,158,11,90);"
+                  " border-radius: 8px; padding:9px; font-size: 14px;} "
+
+                  "QComboBox QAbstractItemView{background-color:#21190F;color:F8FAFC;"
+                  "selection-background-color: #F59E0B; selection-color: #100C07;} "
+
+                  "QCheckBoc{color:#F8FAFC,spacing:8px;}"
+
+                  "QSlider::groove::horizontal{background:3A2A17; height: 6px border-radius: 3px;}"
+
+                  "QSlider::sub-page:horizontal{background:3F59E0B; border-radius: 3px;}");
 
 }
