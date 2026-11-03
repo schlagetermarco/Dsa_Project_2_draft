@@ -6,9 +6,17 @@
 #include <QHBoxLayout>
 #include <QCheckBox>
 #include <QPushButton>
+#include "RecommendationSystem.h"
+#include "MaxHeap.h"
+#include "MergeSort.h"
+#include <QMessageBox>
+#include <algorithm>
+
+using namespace std;
 
 
-DiscoverPage::DiscoverPage(QWidget *parent):QWidget(parent) {
+DiscoverPage::DiscoverPage(const std::vector<Song> &songList, QWidget *parent):QWidget(parent), songs(songList){
+
     QVBoxLayout* discoverLayout = new QVBoxLayout(this);
     discoverLayout->setContentsMargins(35,30,35,25);
     discoverLayout->setSpacing(18);
@@ -92,5 +100,49 @@ DiscoverPage::DiscoverPage(QWidget *parent):QWidget(parent) {
                   "border-radius: 10px; border: none;}"
 
                   "QPushButton:hover{background-color: #FBBF24}");
+
+    connect(recommendButton, &QPushButton::clicked, this,[this,genreSelection,moodSelection,danceabilitySlider,
+        explicitSongs,songCountSelection,adtSelection]() {
+        string genre = genreSelection->currentText().toStdString();
+        string mood = moodSelection->currentText().toStdString();
+        double danceability = danceabilitySlider->value()/100.0;
+        bool includeExplicitSongs = explicitSongs->isChecked();
+
+        QString adt = adtSelection->currentText();
+        std::vector<Song> possibleRecommendations;
+
+        for (Song song : songs) {
+
+            song.recommendedScore = RecommendationSystem::parameterRecommendationScore(song,genre,mood,
+                danceability,includeExplicitSongs);
+
+            if (song.recommendedScore >= 0) {
+                possibleRecommendations.push_back(song);
+            }
+        }
+        if (possibleRecommendations.empty()) {
+            QMessageBox::information(this,"No Recommendations Found","No songs matched your preferences");
+            return;
+        }
+
+        int count = min((int)possibleRecommendations.size(),songCountSelection->currentText().toInt());
+
+        vector<Song> recommendations;
+
+        if (adt=="MaxHeap") {
+            MaxHeap topSongs;
+            for (const Song& song : possibleRecommendations) {
+                topSongs.insert(song);
+            }
+            for (int i = 0; i < count; i++) {
+                recommendations.push_back(topSongs.erase());
+            }
+        }else if (adt=="MergeSort") {
+            MergeSort::sort(possibleRecommendations);
+            for (int i = 0; i < count; i++) {
+                recommendations.push_back(possibleRecommendations[i]);
+            }
+        }
+    });
 
 }

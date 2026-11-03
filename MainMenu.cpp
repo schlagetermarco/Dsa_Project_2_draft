@@ -7,10 +7,11 @@
 #include <QVBoxLayout>
 #include<QPushButton>
 #include<QStackedWidget>
-
-
+#include "DataSetReader.h"
+using namespace std;
 
 MainMenu::MainMenu(QWidget *parent):QMainWindow(parent) {
+    songs = DataSetReader::loadSongs("../data/dataset.csv");
 
     setWindowTitle("TuneNext");
     resize(1000,700);
@@ -50,7 +51,7 @@ MainMenu::MainMenu(QWidget *parent):QMainWindow(parent) {
     submessage->setStyleSheet("font-size: 14px; font-style: italic; color: rgba(248,250,252,120);background:transparent");
     contentLayout->addWidget(submessage);
 
-    DiscoverPage* discoverPage = new DiscoverPage();
+    DiscoverPage* discoverPage = new DiscoverPage(songs);
     pages->addWidget(homePage);
     pages->addWidget(discoverPage);
 
