@@ -53,7 +53,7 @@ DiscoverPage::DiscoverPage(QWidget *parent):QWidget(parent) {
 
     QCheckBox* explicitSongs= new QCheckBox("Include explicit songs",this);
     discoverLayout->addWidget(explicitSongs);
-    discoverLayout->addWidget(explicitSongs);
+
 
     QLabel* songCount = new QLabel("Number of Recommendations",this);
     QComboBox* songCountSelection = new QComboBox(this);
@@ -63,7 +63,7 @@ DiscoverPage::DiscoverPage(QWidget *parent):QWidget(parent) {
 
     QLabel* adtLabel = new QLabel("Recommended algorithm",this);
     QComboBox* adtSelection = new QComboBox(this);
-    adtSelection->addItems({"MaxHeap, MergeSort"});
+    adtSelection->addItems({"MaxHeap", "MergeSort"});
     discoverLayout->addWidget(adtLabel);
     discoverLayout->addWidget(adtSelection);
 
@@ -74,16 +74,23 @@ DiscoverPage::DiscoverPage(QWidget *parent):QWidget(parent) {
     discoverLayout->addStretch();
     setStyleSheet("QLabel{ color:#F8FAFC; background:transparent}"
 
-                  "QComboBox{background-color:#21190F;color:F8FAFC; border: 1px solid rgba(245,158,11,90);"
+                  "QComboBox{background-color:#21190F;color:#F8FAFC; border: 1px solid rgba(245,158,11,90);"
                   " border-radius: 8px; padding:9px; font-size: 14px;} "
 
-                  "QComboBox QAbstractItemView{background-color:#21190F;color:F8FAFC;"
+                  "QComboBox QAbstractItemView{background-color:#21190F;color:#F8FAFC;"
                   "selection-background-color: #F59E0B; selection-color: #100C07;} "
 
-                  "QCheckBoc{color:#F8FAFC,spacing:8px;}"
+                  "QCheckBox{color:#F8FAFC; spacing:8px;}"
 
-                  "QSlider::groove::horizontal{background:3A2A17; height: 6px border-radius: 3px;}"
+                  "QSlider::groove:horizontal{background:#3A2A17; height: 6px; border-radius: 3px;}"
 
-                  "QSlider::sub-page:horizontal{background:3F59E0B; border-radius: 3px;}");
+                  "QSlider::sub-page:horizontal{background:#F59E0B; border-radius: 3px;}"
+
+                  "QSlider::handle:horizontal{background:#FBBF24; border-radius: 8px; margin: -5px 0; width:26px}"
+
+                  "QPushButton{background-color:#F59E0B; color:#100C07; font-size: 15px; font-weight: bold;"
+                  "border-radius: 10px; border: none;}"
+
+                  "QPushButton:hover{background-color: #FBBF24}");
 
 }
