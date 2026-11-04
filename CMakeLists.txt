@@ -21,5 +21,7 @@ add_executable(Project
         Sidebar.cpp
         Sidebar.h
         DiscoverPage.cpp
-        DiscoverPage.h)
+        DiscoverPage.h
+        ResultsPage.cpp
+        ResultsPage.h)
 target_link_libraries(Project PRIVATE Qt6::Widgets)

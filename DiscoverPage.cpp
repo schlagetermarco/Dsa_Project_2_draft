@@ -15,7 +15,8 @@
 using namespace std;
 
 
-DiscoverPage::DiscoverPage(const std::vector<Song> &songList, QWidget *parent):QWidget(parent), songs(songList){
+DiscoverPage::DiscoverPage(const std::vector<Song> &songList, ResultsPage* resultspage,QStackedWidget* pages,
+    QWidget* parent):QWidget(parent), songs(songList){
 
     QVBoxLayout* discoverLayout = new QVBoxLayout(this);
     discoverLayout->setContentsMargins(35,30,35,25);
@@ -102,7 +103,7 @@ DiscoverPage::DiscoverPage(const std::vector<Song> &songList, QWidget *parent):Q
                   "QPushButton:hover{background-color: #FBBF24}");
 
     connect(recommendButton, &QPushButton::clicked, this,[this,genreSelection,moodSelection,danceabilitySlider,
-        explicitSongs,songCountSelection,adtSelection]() {
+        explicitSongs,songCountSelection,adtSelection,resultspage,pages]() {
         string genre = genreSelection->currentText().toStdString();
         string mood = moodSelection->currentText().toStdString();
         double danceability = danceabilitySlider->value()/100.0;
@@ -143,6 +144,9 @@ DiscoverPage::DiscoverPage(const std::vector<Song> &songList, QWidget *parent):Q
                 recommendations.push_back(possibleRecommendations[i]);
             }
         }
+
+        resultspage->displayRecommendations(recommendations);
+        pages->setCurrentWidget(resultspage);
     });
 
 }

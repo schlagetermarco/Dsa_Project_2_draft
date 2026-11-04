@@ -8,6 +8,7 @@
 #include<QPushButton>
 #include<QStackedWidget>
 #include "DataSetReader.h"
+#include "ResultsPage.h"
 using namespace std;
 
 MainMenu::MainMenu(QWidget *parent):QMainWindow(parent) {
@@ -51,9 +52,12 @@ MainMenu::MainMenu(QWidget *parent):QMainWindow(parent) {
     submessage->setStyleSheet("font-size: 14px; font-style: italic; color: rgba(248,250,252,120);background:transparent");
     contentLayout->addWidget(submessage);
 
-    DiscoverPage* discoverPage = new DiscoverPage(songs);
+
+    ResultsPage* resultsPage = new ResultsPage();
+    DiscoverPage* discoverPage = new DiscoverPage(songs,resultsPage,pages);
     pages->addWidget(homePage);
     pages->addWidget(discoverPage);
+    pages->addWidget(resultsPage);
 
     pages->setCurrentWidget(homePage);
 
