@@ -9,6 +9,7 @@
 #include<QStackedWidget>
 #include "DataSetReader.h"
 #include "ResultsPage.h"
+#include "SimilarSongsPage.h"
 using namespace std;
 
 MainMenu::MainMenu(QWidget *parent):QMainWindow(parent) {
@@ -55,8 +56,10 @@ MainMenu::MainMenu(QWidget *parent):QMainWindow(parent) {
 
     ResultsPage* resultsPage = new ResultsPage();
     DiscoverPage* discoverPage = new DiscoverPage(songs,resultsPage,pages);
+    SimilarSongsPage* similarSongsPage = new SimilarSongsPage(songs,resultsPage,pages);
     pages->addWidget(homePage);
     pages->addWidget(discoverPage);
+    pages->addWidget(similarSongsPage);
     pages->addWidget(resultsPage);
 
     pages->setCurrentWidget(homePage);
@@ -70,8 +73,10 @@ MainMenu::MainMenu(QWidget *parent):QMainWindow(parent) {
             });
         }else if (button->text() == "Discover") {
             connect(button,&QPushButton::clicked,this,[pages,discoverPage]() {
-                pages->setCurrentWidget(discoverPage);
-            });
+                pages->setCurrentWidget(discoverPage);});
+        }else if (button->text() == "Similar Songs") {
+            connect(button,&QPushButton::clicked,this,[pages,similarSongsPage]() {
+                pages->setCurrentWidget(similarSongsPage);});
         }
     }
 }
