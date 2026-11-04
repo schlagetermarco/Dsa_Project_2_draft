@@ -13,6 +13,15 @@ ResultsPage::ResultsPage(QWidget *parent) : QWidget(parent){
 void ResultsPage::displayRecommendations(std::vector<Song> songs) {
     recommendations = songs;
     QVBoxLayout* layout = qobject_cast<QVBoxLayout*>(this->layout());
+
+    while ((layout->count()) > 1) {
+        QLayoutItem* item = layout->takeAt(1);
+        if (item->widget() != nullptr) {
+            delete item->widget();
+        }
+        delete item;
+    }
+
     QScrollArea* scrollArea = new QScrollArea(this);
     scrollArea->setWidgetResizable(true);
 
