@@ -106,6 +106,7 @@ DiscoverPage::DiscoverPage(const std::vector<Song> &songList, ResultsPage* resul
 
     connect(recommendButton, &QPushButton::clicked, this,[this,genreSelection,moodSelection,danceabilitySlider,
         explicitSongs,songCountSelection,adtSelection,resultspage,pages]() {
+
         string genre = genreSelection->currentText().toStdString();
         string mood = moodSelection->currentText().toStdString();
         double danceability = danceabilitySlider->value()/100.0;
