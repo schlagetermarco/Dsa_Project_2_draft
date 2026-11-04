@@ -11,6 +11,8 @@
 #include "MergeSort.h"
 #include <QMessageBox>
 #include <algorithm>
+#include <unordered_set>
+#include <chrono>
 
 using namespace std;
 
@@ -111,15 +113,23 @@ DiscoverPage::DiscoverPage(const std::vector<Song> &songList, ResultsPage* resul
 
         QString adt = adtSelection->currentText();
         std::vector<Song> possibleRecommendations;
+        unordered_set<string> repeated_songs;
 
         for (Song song : songs) {
 
             song.recommendedScore = RecommendationSystem::parameterRecommendationScore(song,genre,mood,
                 danceability,includeExplicitSongs);
 
-            if (song.recommendedScore >= 0) {
+            string songIdentifier = song.trackName+"|"+ song.artistName;
+
+
+
+            if (song.recommendedScore >= 0 && repeated_songs.find(songIdentifier)==repeated_songs.end() ) {
                 possibleRecommendations.push_back(song);
+                repeated_songs.insert(songIdentifier);
             }
+
+
         }
         if (possibleRecommendations.empty()) {
             QMessageBox::information(this,"No Recommendations Found","No songs matched your preferences");
@@ -129,6 +139,7 @@ DiscoverPage::DiscoverPage(const std::vector<Song> &songList, ResultsPage* resul
         int count = min((int)possibleRecommendations.size(),songCountSelection->currentText().toInt());
 
         vector<Song> recommendations;
+         auto start = chrono::high_resolution_clock::now();
 
         if (adt=="MaxHeap") {
             MaxHeap topSongs;
@@ -144,8 +155,10 @@ DiscoverPage::DiscoverPage(const std::vector<Song> &songList, ResultsPage* resul
                 recommendations.push_back(possibleRecommendations[i]);
             }
         }
+        auto end = chrono::high_resolution_clock::now();
+        double execTime = chrono::duration<double,milli>(end-start).count();
 
-        resultspage->displayRecommendations(recommendations);
+        resultspage->displayRecommendations(recommendations,execTime);
         pages->setCurrentWidget(resultspage);
     });
 

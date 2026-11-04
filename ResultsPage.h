@@ -8,7 +8,7 @@ class ResultsPage: public QWidget {
     std::vector<Song> recommendations;
 public:
     ResultsPage(QWidget* parent = nullptr);
-    void displayRecommendations(std::vector<Song> songs);
+    void displayRecommendations(std::vector<Song> songs, double execTime);
 
 
 };
