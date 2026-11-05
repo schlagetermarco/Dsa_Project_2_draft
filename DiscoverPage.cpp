@@ -143,6 +143,7 @@ DiscoverPage::DiscoverPage(const std::vector<Song> &songList, ResultsPage* resul
          auto start = chrono::high_resolution_clock::now();
 
         if (adt=="MaxHeap") {
+
             MaxHeap topSongs;
             for (const Song& song : possibleRecommendations) {
                 topSongs.insert(song);

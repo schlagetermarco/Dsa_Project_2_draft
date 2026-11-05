@@ -13,6 +13,7 @@ void MergeSort::mergeSort(std::vector<Song> &songs, int left, int right) {
     std::vector<Song> leftSongs(songs.begin()+left, songs.begin()+mid+1);
     std::vector<Song> rightSongs(songs.begin()+mid+1, songs.begin()+right+1);
 
+
     int i=0;
     int j = 0;
     int k = left;

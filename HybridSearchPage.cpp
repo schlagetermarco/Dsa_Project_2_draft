@@ -20,6 +20,7 @@ using namespace std;
 HybridSearchPage::HybridSearchPage(const std::vector<Song> &songList, ResultsPage *resultspage, QStackedWidget *pages,
     QWidget *parent): QWidget(parent),songs(songList) {
 
+
     QVBoxLayout* HybridSongLayout = new QVBoxLayout(this);
     HybridSongLayout->setContentsMargins(25,25,25,25);
     HybridSongLayout->setSpacing(12);

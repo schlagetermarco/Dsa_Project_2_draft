@@ -24,6 +24,7 @@ void ResultsPage::displayRecommendations(std::vector<Song> songs, double execTim
         delete item;
     }
 
+
     QLabel* time= new QLabel("Execution Time " + QString::number(execTime, 'f',3)+ " ms", this);
     time->setStyleSheet("color: #F59E0B; font-size: 14px; background: transparent;");
     layout->addWidget(time);

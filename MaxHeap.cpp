@@ -13,6 +13,7 @@ void MaxHeap::heapifyUp(int index) {
 }
 
 void MaxHeap::heapifyDown(int index) {
+
     while (2*index+1 < songs.size()) {
         int leftChild = 2*index + 1;
         int rightChild= -1;

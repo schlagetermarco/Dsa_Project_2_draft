@@ -70,6 +70,7 @@ MainMenu::MainMenu(QWidget *parent):QMainWindow(parent) {
 
     QList<QPushButton*> buttons = sideBar->findChildren<QPushButton*>();
 
+
     for (QPushButton* button : buttons) {
         if (button->text() == "Home") {
             connect(button,&QPushButton::clicked,this,[pages,homePage]() {

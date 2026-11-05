@@ -47,9 +47,4 @@ Sidebar::Sidebar(QWidget *parent):QWidget(parent) {
     hybridSearchButton->setFixedHeight(42);
     hybridSearchButton->setStyleSheet(buttonStyle);
     sideBarLayout->addWidget(hybridSearchButton);
-
-    QPushButton* settingButton= new QPushButton("Settings",this);
-    settingButton->setFixedHeight(42);
-    settingButton->setStyleSheet(buttonStyle);
-    sideBarLayout->addWidget(settingButton);
 }

@@ -19,6 +19,7 @@ using namespace std;
 SimilarSongsPage::SimilarSongsPage(const std::vector<Song> &songList, ResultsPage *resultspage, QStackedWidget *pages,
     QWidget *parent): QWidget(parent),songs(songList){
 
+
     QVBoxLayout* similarSongLayout = new QVBoxLayout(this);
     similarSongLayout->setContentsMargins(25,25,25,25);
     similarSongLayout->setSpacing(25);

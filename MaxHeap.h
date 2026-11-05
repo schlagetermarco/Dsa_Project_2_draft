@@ -5,6 +5,7 @@
 
 
 class MaxHeap {
+
     std::vector<Song> songs;
     void heapifyUp(int index);
     void heapifyDown(int index);

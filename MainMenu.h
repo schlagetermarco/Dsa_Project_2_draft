@@ -8,6 +8,7 @@ class QVPushButton;
 class QWidget;
 
 class MainMenu : public QMainWindow{
+
     QStackedWidget* pageStack;
     QWidget *homePage;
     std::vector<Song> songs;

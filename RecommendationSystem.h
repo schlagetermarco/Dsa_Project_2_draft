@@ -4,6 +4,7 @@
 #include <string>
 
 class RecommendationSystem {
+
 public:
     static double parameterRecommendationScore(const Song& song, const std::string& genre, const std::string& mood , double danceability, bool explicitSong);
     static double similarityRecommendationScore(const Song& song, const Song& likedSong, bool explicitSong);

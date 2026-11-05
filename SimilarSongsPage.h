@@ -6,6 +6,7 @@
 #include <QStackedWidget>
 
 class SimilarSongsPage: public QWidget {
+    
     const std::vector<Song>& songs;
     Song userSong;
 public:

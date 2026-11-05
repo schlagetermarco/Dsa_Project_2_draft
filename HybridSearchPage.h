@@ -7,7 +7,6 @@
 
 
 class HybridSearchPage : public QWidget{
-
     const std::vector<Song>& songs;
     Song userSong;
 

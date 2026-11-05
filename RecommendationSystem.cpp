@@ -10,6 +10,7 @@ double RecommendationSystem::parameterRecommendationScore(const Song &song, cons
         return -1.0;
     }
 
+
     double genreScore = 1.0;
     double danceabilityScore = 1.0;
     double moodScore = 1.0;
