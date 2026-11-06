@@ -23,8 +23,6 @@ add_executable(Project
         DiscoverPage.h
         ResultsPage.cpp
         ResultsPage.h
-        Favorites.cpp
-        Favorites.h
         SimilarSongsPage.cpp
         SimilarSongsPage.h
         HybridSearchPage.cpp
