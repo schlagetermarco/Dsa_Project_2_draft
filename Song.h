@@ -1,6 +1,7 @@
 #pragma once
 #include <string>
 
+//song constructor
 struct  Song {
 
     int index = 0;

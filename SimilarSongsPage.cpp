@@ -16,6 +16,7 @@
 
 using namespace std;
 
+//makes page for similar songs
 SimilarSongsPage::SimilarSongsPage(const std::vector<Song> &songList, ResultsPage *resultspage, QStackedWidget *pages,
     QWidget *parent): QWidget(parent),songs(songList){
 
@@ -41,6 +42,7 @@ SimilarSongsPage::SimilarSongsPage(const std::vector<Song> &songList, ResultsPag
 
     similarSongLayout->addWidget(searchSong);
 
+    //shows matching songs for what the user ttypes in the bar
     QComboBox* matchingSongs = new QComboBox(this);
     matchingSongs->setStyleSheet("background-color: #21190F; color: #F8FAFC; border: 1px solid #49351B;"
                               "border-radius: 8px; padding: 10px; font-size: 14px;");
@@ -48,6 +50,7 @@ SimilarSongsPage::SimilarSongsPage(const std::vector<Song> &songList, ResultsPag
     matchingSongs->addItem("Select a song");
     similarSongLayout->addWidget(matchingSongs);
 
+    //refills dropdown everytime text changes
     connect(searchSong, &QLineEdit::textChanged,this,[this,matchingSongs](const QString &text){
         matchingSongs->clear();
         matchingSongs->addItem("Select a song");
@@ -55,6 +58,7 @@ SimilarSongsPage::SimilarSongsPage(const std::vector<Song> &songList, ResultsPag
             return;
         }
 
+        //first 20 matches shown only
         int matches = 0;
         for (int i = 0; i < songs.size(); ++i) {
             const Song &song = songs[i];
@@ -71,6 +75,7 @@ SimilarSongsPage::SimilarSongsPage(const std::vector<Song> &songList, ResultsPag
         }
     });
 
+    //saves song user picks
     connect(matchingSongs, &QComboBox::currentIndexChanged,this,[this,matchingSongs](int index) {
         if (index <= 0) {
             return;
@@ -83,6 +88,7 @@ SimilarSongsPage::SimilarSongsPage(const std::vector<Song> &songList, ResultsPag
     QCheckBox* explicitSongs= new QCheckBox("Include explicit songs",this);
     similarSongLayout->addWidget(explicitSongs);
 
+    //options for results count and also option for the algorithm
     QLabel* songCount = new QLabel("Number of Recommendations",this);
     QComboBox* songCountSelection = new QComboBox(this);
     songCountSelection->addItems({"10","25","50","75","100"});
@@ -100,6 +106,8 @@ SimilarSongsPage::SimilarSongsPage(const std::vector<Song> &songList, ResultsPag
     recommendButton->setCursor(Qt::PointingHandCursor);
     similarSongLayout->addWidget(recommendButton);
     similarSongLayout->addStretch();
+
+    //styling for the entire page
     setStyleSheet("QLabel{ color:#F8FAFC; background:transparent}"
 
                   "QComboBox{background-color:#21190F;color:#F8FAFC; border: 1px solid rgba(245,158,11,90);"
@@ -121,6 +129,7 @@ SimilarSongsPage::SimilarSongsPage(const std::vector<Song> &songList, ResultsPag
 
                   "QPushButton:hover{background-color: #FBBF24}");
 
+                  //runs when user clicks recommendatio button
     connect(recommendButton, &QPushButton::clicked, this,[this,matchingSongs,explicitSongs,
         songCountSelection,adtSelection,resultspage,pages]() {
         if (matchingSongs->currentIndex()<=0) {
@@ -134,6 +143,7 @@ SimilarSongsPage::SimilarSongsPage(const std::vector<Song> &songList, ResultsPag
         vector<Song> possibleRecommendations;
         unordered_set<string> repeated_songs;
 
+        //scores every song based on similarity
         for (Song song : songs) {
             if (song.index== userSong.index) {
                 continue;
@@ -144,6 +154,7 @@ SimilarSongsPage::SimilarSongsPage(const std::vector<Song> &songList, ResultsPag
 
             string songIdentifier = song.trackName+"|"+ song.artistName;
 
+            //keeps scores and skips the repeats
             if (song.recommendedScore >= 0 && repeated_songs.find(songIdentifier)==repeated_songs.end() ) {
                 possibleRecommendations.push_back(song);
                 repeated_songs.insert(songIdentifier);
@@ -153,9 +164,13 @@ SimilarSongsPage::SimilarSongsPage(const std::vector<Song> &songList, ResultsPag
         int count = min((int)possibleRecommendations.size(),songCountSelection->currentText().toInt());
 
         vector<Song> recommendations;
+
+        //timing to compare two algorithms
          auto start = chrono::high_resolution_clock::now();
 
         if (adt=="MaxHeap") {
+
+            //insert all the songs and take out top songs 
             MaxHeap topSongs;
             for (const Song& song : possibleRecommendations) {
                 topSongs.insert(song);
@@ -164,6 +179,8 @@ SimilarSongsPage::SimilarSongsPage(const std::vector<Song> &songList, ResultsPag
                 recommendations.push_back(topSongs.erase());
             }
         }else if (adt=="MergeSort") {
+
+            //sorts the whole list and takes top songs
             MergeSort::sort(possibleRecommendations);
             for (int i = 0; i < count; i++) {
                 recommendations.push_back(possibleRecommendations[i]);
@@ -171,6 +188,8 @@ SimilarSongsPage::SimilarSongsPage(const std::vector<Song> &songList, ResultsPag
         }
         auto end = chrono::high_resolution_clock::now();
         double execTime = chrono::duration<double,milli>(end-start).count();
+        
+        //results go to results page and go to the page
         resultspage->displayRecommendations(recommendations, execTime);
         pages->setCurrentWidget(resultspage);
 

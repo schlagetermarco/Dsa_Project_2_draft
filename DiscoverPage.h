@@ -5,6 +5,7 @@
 #include "ResultsPage.h"
 #include <QStackedWidget>
 
+//discover page class
 class DiscoverPage: public QWidget{
 
     const std::vector<Song>& songs;

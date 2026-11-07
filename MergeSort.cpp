@@ -1,5 +1,6 @@
 #include "MergeSort.h"
 
+//mergesort algorithm
 void MergeSort::mergeSort(std::vector<Song> &songs, int left, int right) {
     if (left >= right) {
         return;
@@ -10,6 +11,7 @@ void MergeSort::mergeSort(std::vector<Song> &songs, int left, int right) {
     mergeSort(songs, left, mid);
     mergeSort(songs, mid + 1, right);
 
+    //merge
     std::vector<Song> leftSongs(songs.begin()+left, songs.begin()+mid+1);
     std::vector<Song> rightSongs(songs.begin()+mid+1, songs.begin()+right+1);
 
@@ -18,6 +20,7 @@ void MergeSort::mergeSort(std::vector<Song> &songs, int left, int right) {
     int j = 0;
     int k = left;
 
+    //merge both halves based on the score
     while (i < leftSongs.size() && j < rightSongs.size()) {
         if (leftSongs[i].recommendedScore >= rightSongs[j].recommendedScore) {
             songs[k]=leftSongs[i];
@@ -29,12 +32,14 @@ void MergeSort::mergeSort(std::vector<Song> &songs, int left, int right) {
         k++;
     }
 
+
     while (i< leftSongs.size()) {
         songs[k]=leftSongs[i];
         i++;
         k++;
     }
 
+    
     while (j<rightSongs.size()) {
         songs[k]=rightSongs[j];
         j++;
@@ -42,6 +47,7 @@ void MergeSort::mergeSort(std::vector<Song> &songs, int left, int right) {
     }
 }
 
+//sorts the songs based on score
 void MergeSort::sort(std::vector<Song> &songs) {
     if (songs.empty()) {
         return;

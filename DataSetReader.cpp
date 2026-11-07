@@ -4,6 +4,8 @@
 #include <stdexcept>
 using namespace std;
 
+
+//reads line and puts it in vector
 std::vector<std::string> DataSetReader::loadLine(const std::string &line){
 
     istringstream data(line);
@@ -11,6 +13,8 @@ std::vector<std::string> DataSetReader::loadLine(const std::string &line){
     vector<string> values;
     bool doubleQuote=false;
     char character;
+
+    //checks if each character is a quote or comma
     while (data.get(character)) {
         if (character=='"') {
             doubleQuote=!doubleQuote;
@@ -25,6 +29,7 @@ std::vector<std::string> DataSetReader::loadLine(const std::string &line){
     return values;
 }
 
+//parses line to be put in the song struct
 void DataSetReader::parseLine(const std::vector<std::string> &data,vector<Song> &songs) {
     Song song;
     for (int i=0; i<data.size(); i++) {
@@ -118,6 +123,7 @@ void DataSetReader::parseLine(const std::vector<std::string> &data,vector<Song> 
     songs.push_back(song);
 }
 
+//reads dataset putting it into song vector
 std::vector<Song> DataSetReader::loadSongs(const std::string &fileName) {
     ifstream tracks(fileName);
     if(!tracks.is_open()) {

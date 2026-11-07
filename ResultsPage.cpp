@@ -9,6 +9,7 @@
 #include <QFrame>
 #include <QHBoxLayout>
 
+//page with the title and results are added later
 ResultsPage::ResultsPage(QWidget *parent) : QWidget(parent){
     QVBoxLayout* layout = new QVBoxLayout(this);
     QLabel* title = new QLabel("Your Recommendations", this);
@@ -16,10 +17,12 @@ ResultsPage::ResultsPage(QWidget *parent) : QWidget(parent){
     layout->addWidget(title);
 }
 
+//gives list of the song cards and how long the search actually took
 void ResultsPage::displayRecommendations(std::vector<Song> songs, double execTime) {
     recommendations = songs;
     QVBoxLayout* layout = qobject_cast<QVBoxLayout*>(this->layout());
 
+    //gets rid of old results
     while ((layout->count()) > 1) {
         QLayoutItem* item = layout->takeAt(1);
         if (item->widget() != nullptr) {
@@ -38,6 +41,7 @@ void ResultsPage::displayRecommendations(std::vector<Song> songs, double execTim
     QWidget* list = new QWidget(this);
     QVBoxLayout* listLayout = new QVBoxLayout(list);
 
+    //make card for each song recommended
     for (const Song& song : recommendations) {
         QFrame* songCard = new QFrame(list);
         songCard->setObjectName("songCard");
@@ -51,6 +55,7 @@ void ResultsPage::displayRecommendations(std::vector<Song> songs, double execTim
         QLabel* cardIcon = new QLabel("♫",songCard);
         cardIcon->setFixedWidth(40);
         cardIcon->setAlignment(Qt::AlignCenter);
+
         cardIcon->setStyleSheet("color: #F59E0B; font-size: 30px; background: transparent; border: none");
 
         QVBoxLayout* songDetails = new QVBoxLayout();
@@ -74,16 +79,21 @@ void ResultsPage::displayRecommendations(std::vector<Song> songs, double execTim
         favoriteButton->setStyleSheet("background-color: #F59E0B;""color: black;""font-size: 14px;""border-radius: 6px;""padding: 8px;");
         cards->addWidget(favoriteButton);
 
+        //check if song is favorite and change text on button to saved
         if(favorites.isFavorite(song)){
             favoriteButton->setText("Saved");
         }
 
+        //connect button to favorites class
         connect(favoriteButton, &QPushButton::clicked, [this, favoriteButton, song]() {
             if (favorites.isFavorite(song)) {
+
+                //remove from favorites if alreayd there
                 favoriteButton->setText("Save");
                 favorites.removeFavorite(song);
                 
             } 
+            //add to favorites if not already there
             else {
                 favorites.addFavorite(song);
                 favoriteButton->setText("Saved");

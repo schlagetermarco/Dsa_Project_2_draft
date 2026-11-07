@@ -3,6 +3,8 @@
 #include <vector>
 #include "Song.h"
 
+//class for reading and parsing songs and putting in vector
+
 class DataSetReader {
 
     static std::vector<std::string> loadLine(const std::string& line);

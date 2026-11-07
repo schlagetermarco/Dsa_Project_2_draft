@@ -5,6 +5,7 @@
 #include "ResultsPage.h"
 #include <QStackedWidget>
 
+//class for hybrid search page
 
 class HybridSearchPage : public QWidget{
     const std::vector<Song>& songs;

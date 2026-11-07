@@ -4,6 +4,7 @@
 #include <vector>
 using namespace std;
 
+//saving favorite classes
 class Favorites {
     private:
         void saveFavorites() const;

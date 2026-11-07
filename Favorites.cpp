@@ -6,6 +6,7 @@ Favorites::Favorites() {
     loadFavorites();
 }
 
+//saves users favorite songs in a text file  
 void Favorites::saveFavorites() const {
     ofstream file("favorites.txt");
     if (!file.is_open()) {
@@ -22,12 +23,14 @@ void Favorites::saveFavorites() const {
 
 }
 
+//loads favorites songs from text file
 void Favorites::loadFavorites() {
     ifstream file("favorites.txt");
     if (!file.is_open()) {
         return;
     }
 
+    //reads every line and puts everything in a vector
     Song song1;
     while (getline(file, song1.trackID, ',')) {
         if(!getline(file, song1.artistName)){
@@ -49,6 +52,8 @@ void Favorites::loadFavorites() {
 
     file.close();
 }
+
+//checks favorites to see if song is already in there
 bool Favorites::isFavorite(const Song& song) const{
     for(int i=0; i<favoriteSongs.size(); i++){
         if(song.trackID == favoriteSongs[i].trackID && song.artistName == favoriteSongs[i].artistName && song.albumName == favoriteSongs[i].albumName && song.trackName == favoriteSongs[i].trackName) {
@@ -59,10 +64,12 @@ bool Favorites::isFavorite(const Song& song) const{
     return false;
 }
 
+//remove songs from favorites if user wants to
 void Favorites::removeFavorite(const Song& song){
     for(int i=0; i<favoriteSongs.size(); i++){
         if(song.trackID == favoriteSongs[i].trackID && song.artistName == favoriteSongs[i].artistName && song.albumName == favoriteSongs[i].albumName && song.trackName == favoriteSongs[i].trackName) {
-            
+
+            //removes song from vector
             favoriteSongs.erase(favoriteSongs.begin() + i);
             saveFavorites();
     
@@ -71,10 +78,12 @@ void Favorites::removeFavorite(const Song& song){
     }
 }
 
+//return vector of fav songs
 const vector<Song>& Favorites::getFavorites() const{
     return favoriteSongs;
 }
 
+//adds song to favorites
 void Favorites::addFavorite(const Song& song){
     if(!isFavorite(song)){
         favoriteSongs.push_back(song);

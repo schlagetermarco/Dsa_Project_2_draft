@@ -5,6 +5,7 @@
 #include "Song.h"
 #include "Favorites.h"
 
+//results page class
 class ResultsPage: public QWidget {
     std::vector<Song> recommendations;
     Favorites favorites;
