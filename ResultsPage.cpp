@@ -1,3 +1,7 @@
+#pragma once
+#include <QDialog>
+#include <QListWidget>
+#include <QPushButton>
 #include "ResultsPage.h"
 #include <QVBoxLayout>
 #include <QLabel>
@@ -23,7 +27,6 @@ void ResultsPage::displayRecommendations(std::vector<Song> songs, double execTim
         }
         delete item;
     }
-
 
     QLabel* time= new QLabel("Execution Time " + QString::number(execTime, 'f',3)+ " ms", this);
     time->setStyleSheet("color: #F59E0B; font-size: 14px; background: transparent;");
@@ -65,6 +68,29 @@ void ResultsPage::displayRecommendations(std::vector<Song> songs, double execTim
 
         cards->addWidget(cardIcon);
         cards->addLayout(songDetails,1);
+
+        //adding favorite button for users to save their favorite songs
+        QPushButton* favoriteButton = new QPushButton("Save", songCard);
+        favoriteButton->setStyleSheet("background-color: #F59E0B;""color: black;""font-size: 14px;""border-radius: 6px;""padding: 8px;");
+        cards->addWidget(favoriteButton);
+
+        if(favorites.isFavorite(song)){
+            favoriteButton->setText("Saved");
+        }
+
+        connect(favoriteButton, &QPushButton::clicked, [this, favoriteButton, song]() {
+            if (favorites.isFavorite(song)) {
+                favoriteButton->setText("Save");
+                favorites.removeFavorite(song);
+                
+            } 
+            else {
+                favorites.addFavorite(song);
+                favoriteButton->setText("Saved");
+            }
+        });
+
+
         listLayout->addWidget(songCard);
     }
 
