@@ -42,7 +42,10 @@ void ResultsPage::displayRecommendations(std::vector<Song> songs, double execTim
     QVBoxLayout* listLayout = new QVBoxLayout(list);
 
     //make card for each song recommended
-    for (const Song& song : recommendations) {
+    for (int i=0; i<recommendations.size(); i++) {
+        const Song& song = recommendations[i];
+
+
         QFrame* songCard = new QFrame(list);
         songCard->setObjectName("songCard");
         songCard->setStyleSheet("QFrame#songCard{background-color: #21190F;border-radius: 12px; "
@@ -61,7 +64,7 @@ void ResultsPage::displayRecommendations(std::vector<Song> songs, double execTim
         QVBoxLayout* songDetails = new QVBoxLayout();
         songDetails->setSpacing(4);
 
-        QLabel* songTitle = new QLabel(QString::fromStdString(song.trackName),songCard);
+        QLabel* songTitle = new QLabel(QString::number(i+1)+". "+QString::fromStdString(song.trackName),songCard);
         songTitle->setStyleSheet("color: #F8FAFC;font-size: 16px; font-weight: bold; border:none;"
                                  "background:transparent;");
 
@@ -70,6 +73,11 @@ void ResultsPage::displayRecommendations(std::vector<Song> songs, double execTim
 
         songDetails->addWidget(songTitle);
         songDetails->addWidget(artist);
+
+        //adds album to results page for each song
+        QLabel* album = new QLabel(QString::fromStdString(song.albumName),songCard);
+        album->setStyleSheet("color: #B6ACA0; font-size:12px; background: transparent; border:none;");
+        songDetails->addWidget(album);
 
         cards->addWidget(cardIcon);
         cards->addLayout(songDetails,1);
