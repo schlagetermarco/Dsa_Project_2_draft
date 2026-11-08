@@ -79,6 +79,12 @@ void ResultsPage::displayRecommendations(std::vector<Song> songs, double execTim
         album->setStyleSheet("color: #B6ACA0; font-size:12px; background: transparent; border:none;");
         songDetails->addWidget(album);
 
+        //adds similarity score to results page so user can see how well song matches
+        QLabel* score = new QLabel("Score: "+QString::number(song.recommendedScore,'f',3),songCard);
+        score->setStyleSheet("color: #F59E0B; font-size: 12px; background: transparent; border:none;");
+        songDetails->addWidget(score);
+
+
         cards->addWidget(cardIcon);
         cards->addLayout(songDetails,1);
 
