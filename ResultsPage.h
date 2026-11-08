@@ -16,5 +16,8 @@ public:
     ResultsPage(QWidget* parent = nullptr);
     void displayRecommendations(std::vector<Song> songs, double execTime);
 
+    const std::vector<Song>& getFavoriteSongs() const {
+        return favorites.getFavorites();
+    }
 
 };

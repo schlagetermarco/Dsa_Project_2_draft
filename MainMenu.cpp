@@ -1,5 +1,6 @@
 
 #include "MainMenu.h"
+#include <QListWidget>
 #include <QLabel>
 #include <QString>
 #include <QWidget>
@@ -72,6 +73,20 @@ MainMenu::MainMenu(QWidget *parent):QMainWindow(parent) {
 
     
     ResultsPage* resultsPage = new ResultsPage();
+    QWidget* favoritesPage = new QWidget();
+    QVBoxLayout* favoritesLayout = new QVBoxLayout(favoritesPage);
+
+    favoritesLayout->setContentsMargins(35,30,35,25);
+    favoritesLayout->setSpacing(18);
+    QLabel* favoritesTitle = new QLabel("Favorite Songs",favoritesPage);
+    favoritesTitle->setStyleSheet("color: #F59E0B; font-size: 30px; font-weight: bold; background:transparent;");
+   
+
+    favoritesLayout->addWidget(favoritesTitle);
+    QListWidget* favoritesList = new QListWidget(favoritesPage);
+    favoritesList->setStyleSheet("background-color: #21190F; color: white; border: none; QListWidget::item { padding: 10px; }");
+    favoritesLayout->addWidget(favoritesList);
+
     DiscoverPage* discoverPage = new DiscoverPage(songs,resultsPage,pages);
     SimilarSongsPage* similarSongsPage = new SimilarSongsPage(songs,resultsPage,pages);
     HybridSearchPage* hybridSearchPage = new HybridSearchPage(songs,resultsPage,pages);
@@ -82,6 +97,7 @@ MainMenu::MainMenu(QWidget *parent):QMainWindow(parent) {
     pages->addWidget(similarSongsPage);
     pages->addWidget(hybridSearchPage);
     pages->addWidget(resultsPage);
+    pages->addWidget(favoritesPage);
 
     pages->setCurrentWidget(homePage);
 
@@ -103,6 +119,29 @@ MainMenu::MainMenu(QWidget *parent):QMainWindow(parent) {
         }else  if (button->text() == "Hybrid Search") {
             connect(button,&QPushButton::clicked,this,[pages,hybridSearchPage]() {
                  pages->setCurrentWidget(hybridSearchPage);});
+        }
+
+        //favorites page
+        else if (button->text() == "Favorites") {
+            connect(button,&QPushButton::clicked,this,[pages,resultsPage, favoritesList, favoritesPage]() {
+
+                favoritesList->clear();
+
+                const std::vector<Song>& favoriteSongs = resultsPage->getFavoriteSongs();
+
+                //loops through favorites and addes them to list to show
+                for(int i=0; i<favoriteSongs.size(); i++){
+                    QString name = QString::fromStdString(favoriteSongs[i].trackName);
+                    QString artist = QString::fromStdString(favoriteSongs[i].artistName);
+                    favoritesList->addItem(name+" - "+artist);
+                }
+
+                //if no favorites, show no favorites
+                if(favoriteSongs.empty()){
+                    favoritesList->addItem("No Favorites");
+                }
+            
+                pages->setCurrentWidget(favoritesPage);});
         }
     }
 }
