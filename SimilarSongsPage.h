@@ -5,6 +5,7 @@
 #include "ResultsPage.h"
 #include <QStackedWidget>
 
+//similar songs constructor
 class SimilarSongsPage: public QWidget {
     
     const std::vector<Song>& songs;

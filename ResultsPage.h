@@ -3,10 +3,15 @@
 #include <QWidget>
 #include <vector>
 #include "Song.h"
+#include "Favorites.h"
 
+//results page class
 class ResultsPage: public QWidget {
-
     std::vector<Song> recommendations;
+    Favorites favorites;
+
+    double lastExecutionTime = 0.0;
+
 public:
     ResultsPage(QWidget* parent = nullptr);
     void displayRecommendations(std::vector<Song> songs, double execTime);

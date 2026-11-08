@@ -1,6 +1,9 @@
 #include "MaxHeap.h"
 #include <stdexcept>
 
+//maxHeap implementation
+
+//brings value up by heapify up
 void MaxHeap::heapifyUp(int index) {
     while (index > 0) {
         int parent = (index-1) / 2;
@@ -12,6 +15,7 @@ void MaxHeap::heapifyUp(int index) {
     }
 }
 
+//brings value down by heapify down
 void MaxHeap::heapifyDown(int index) {
 
     while (2*index+1 < songs.size()) {
@@ -37,11 +41,13 @@ void MaxHeap::heapifyDown(int index) {
     }
 }
 
+//insertion into heap
 void MaxHeap::insert(const Song &song) {
     songs.push_back(song);
     heapifyUp(songs.size() - 1);
 }
 
+//removes value from heap
 Song MaxHeap::erase() {
     if (songs.empty()) {
         throw std::runtime_error("There are no songs in the heap");
@@ -55,6 +61,7 @@ Song MaxHeap::erase() {
     return top;
 }
 
+//gets top rated song
 Song MaxHeap::peekTopRated() const {
     if (songs.empty()) {
         throw std::runtime_error("There are no songs in the heap");
@@ -62,10 +69,12 @@ Song MaxHeap::peekTopRated() const {
     return songs[0];
 }
 
+//checks if heap is empty
 bool MaxHeap::isEmpty() const {
     return songs.empty();
 }
 
+//returns heap size
 int MaxHeap::size() const {
     return songs.size();
 }

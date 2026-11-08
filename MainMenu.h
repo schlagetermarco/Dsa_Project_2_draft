@@ -3,6 +3,7 @@
 #include<vector>
 #include "Song.h"
 
+//header for main menu
 class QStackedWidget;
 class QVPushButton;
 class QWidget;

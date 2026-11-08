@@ -20,10 +20,12 @@ using namespace std;
 DiscoverPage::DiscoverPage(const std::vector<Song> &songList, ResultsPage* resultspage,QStackedWidget* pages,
     QWidget* parent):QWidget(parent), songs(songList){
 
+    //layou setup
     QVBoxLayout* discoverLayout = new QVBoxLayout(this);
     discoverLayout->setContentsMargins(35,30,35,25);
     discoverLayout->setSpacing(18);
 
+    //title plus desription
     QLabel* title = new QLabel("Discover new music",this);
     title->setStyleSheet("color: #F59E0B; font-size: 34px; font-weight: bold; background:transparent;");
     discoverLayout->addWidget(title);
@@ -32,6 +34,7 @@ DiscoverPage::DiscoverPage(const std::vector<Song> &songList, ResultsPage* resul
     description->setStyleSheet("color:rgba(248,250,252,175); font-size:15px; background:transparent;");
     discoverLayout->addWidget(description);
 
+    //genre choice for preferences
     QLabel* genre = new QLabel("Genre",this);
     QComboBox* genreSelection = new QComboBox(this);
     genreSelection->addItems({"Any","Pop","Rock","Hip-Hop","Rap","Country","Electronic",
@@ -39,22 +42,26 @@ DiscoverPage::DiscoverPage(const std::vector<Song> &songList, ResultsPage* resul
     discoverLayout->addWidget(genre);
     discoverLayout->addWidget(genreSelection);
 
+    //mood choice for preferences
     QLabel* mood = new QLabel("Mood",this);
     QComboBox* moodSelection = new QComboBox(this);
     moodSelection->addItems({"Any","Happy","Sad", "Chill", "Energetic"});
     discoverLayout->addWidget(mood);
     discoverLayout->addWidget(moodSelection);
 
+    //danceability slider for preferences
     QLabel* danceability = new QLabel("Danceability",this);
     QSlider* danceabilitySlider = new QSlider(Qt::Horizontal,this);
     danceabilitySlider->setRange(0,100);
     danceabilitySlider->setValue(50);
     QLabel* danceVal = new QLabel("50",this);
 
+    //makes the slider update label
     connect(danceabilitySlider, &QSlider::valueChanged,danceVal,[danceVal](int value) {
         danceVal->setText(QString::number(value));
     });
 
+    
     QHBoxLayout* danceabilityLayout = new QHBoxLayout();
     danceabilityLayout->addWidget(danceabilitySlider);
     danceabilityLayout->addWidget(danceVal);
@@ -62,27 +69,32 @@ DiscoverPage::DiscoverPage(const std::vector<Song> &songList, ResultsPage* resul
     discoverLayout->addWidget(danceability);
     discoverLayout->addLayout(danceabilityLayout);
 
+    //checkobox that includes explicit songs
     QCheckBox* explicitSongs= new QCheckBox("Include explicit songs",this);
     discoverLayout->addWidget(explicitSongs);
 
-
+    //selection choice for number of recommendation the user gets
     QLabel* songCount = new QLabel("Number of Recommendations",this);
     QComboBox* songCountSelection = new QComboBox(this);
     songCountSelection->addItems({"10","25","50","75","100"});
     discoverLayout->addWidget(songCount);
     discoverLayout->addWidget(songCountSelection);
 
+    //selection choice for which dsa algrithm to use
     QLabel* adtLabel = new QLabel("Recommended algorithm",this);
     QComboBox* adtSelection = new QComboBox(this);
     adtSelection->addItems({"MaxHeap", "MergeSort"});
     discoverLayout->addWidget(adtLabel);
     discoverLayout->addWidget(adtSelection);
-
+    
+    //button that gets the recommendations
     QPushButton* recommendButton = new QPushButton("Get Recommendation",this);
     recommendButton->setFixedHeight(48);
     recommendButton->setCursor(Qt::PointingHandCursor);
     discoverLayout->addWidget(recommendButton);
     discoverLayout->addStretch();
+
+    //page styling
     setStyleSheet("QLabel{ color:#F8FAFC; background:transparent}"
 
                   "QComboBox{background-color:#21190F;color:#F8FAFC; border: 1px solid rgba(245,158,11,90);"
@@ -104,20 +116,25 @@ DiscoverPage::DiscoverPage(const std::vector<Song> &songList, ResultsPage* resul
 
                   "QPushButton:hover{background-color: #FBBF24}");
 
+    //connect button to recommendation and the display
     connect(recommendButton, &QPushButton::clicked, this,[this,genreSelection,moodSelection,danceabilitySlider,
         explicitSongs,songCountSelection,adtSelection,resultspage,pages]() {
 
+        //gets user choices giving them variables
         string genre = genreSelection->currentText().toStdString();
         string mood = moodSelection->currentText().toStdString();
         double danceability = danceabilitySlider->value()/100.0;
         bool includeExplicitSongs = explicitSongs->isChecked();
 
+        //gets algorithm choice and makes vector of recommendations
         QString adt = adtSelection->currentText();
         std::vector<Song> possibleRecommendations;
         unordered_set<string> repeated_songs;
 
+        
         for (Song song : songs) {
 
+            //calcs recommendation score for every song based on all factors
             song.recommendedScore = RecommendationSystem::parameterRecommendationScore(song,genre,mood,
                 danceability,includeExplicitSongs);
 
@@ -132,6 +149,8 @@ DiscoverPage::DiscoverPage(const std::vector<Song> &songList, ResultsPage* resul
 
 
         }
+
+        
         if (possibleRecommendations.empty()) {
             QMessageBox::information(this,"No Recommendations Found","No songs matched your preferences");
             return;
@@ -142,6 +161,7 @@ DiscoverPage::DiscoverPage(const std::vector<Song> &songList, ResultsPage* resul
         vector<Song> recommendations;
          auto start = chrono::high_resolution_clock::now();
 
+         //uses algorithm choice that user wants(maxheap,mergesort,)
         if (adt=="MaxHeap") {
 
             MaxHeap topSongs;

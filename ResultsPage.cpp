@@ -1,3 +1,7 @@
+#pragma once
+#include <QDialog>
+#include <QListWidget>
+#include <QPushButton>
 #include "ResultsPage.h"
 #include <QVBoxLayout>
 #include <QLabel>
@@ -5,6 +9,7 @@
 #include <QFrame>
 #include <QHBoxLayout>
 
+//page with the title and results are added later
 ResultsPage::ResultsPage(QWidget *parent) : QWidget(parent){
     QVBoxLayout* layout = new QVBoxLayout(this);
     QLabel* title = new QLabel("Your Recommendations", this);
@@ -12,10 +17,12 @@ ResultsPage::ResultsPage(QWidget *parent) : QWidget(parent){
     layout->addWidget(title);
 }
 
+//gives list of the song cards and how long the search actually took
 void ResultsPage::displayRecommendations(std::vector<Song> songs, double execTime) {
     recommendations = songs;
     QVBoxLayout* layout = qobject_cast<QVBoxLayout*>(this->layout());
 
+    //gets rid of old results
     while ((layout->count()) > 1) {
         QLayoutItem* item = layout->takeAt(1);
         if (item->widget() != nullptr) {
@@ -23,7 +30,6 @@ void ResultsPage::displayRecommendations(std::vector<Song> songs, double execTim
         }
         delete item;
     }
-
 
     QLabel* time= new QLabel("Execution Time " + QString::number(execTime, 'f',3)+ " ms", this);
     time->setStyleSheet("color: #F59E0B; font-size: 14px; background: transparent;");
@@ -35,7 +41,11 @@ void ResultsPage::displayRecommendations(std::vector<Song> songs, double execTim
     QWidget* list = new QWidget(this);
     QVBoxLayout* listLayout = new QVBoxLayout(list);
 
-    for (const Song& song : recommendations) {
+    //make card for each song recommended
+    for (int i=0; i<recommendations.size(); i++) {
+        const Song& song = recommendations[i];
+
+
         QFrame* songCard = new QFrame(list);
         songCard->setObjectName("songCard");
         songCard->setStyleSheet("QFrame#songCard{background-color: #21190F;border-radius: 12px; "
@@ -48,12 +58,13 @@ void ResultsPage::displayRecommendations(std::vector<Song> songs, double execTim
         QLabel* cardIcon = new QLabel("♫",songCard);
         cardIcon->setFixedWidth(40);
         cardIcon->setAlignment(Qt::AlignCenter);
+
         cardIcon->setStyleSheet("color: #F59E0B; font-size: 30px; background: transparent; border: none");
 
         QVBoxLayout* songDetails = new QVBoxLayout();
         songDetails->setSpacing(4);
 
-        QLabel* songTitle = new QLabel(QString::fromStdString(song.trackName),songCard);
+        QLabel* songTitle = new QLabel(QString::number(i+1)+". "+QString::fromStdString(song.trackName),songCard);
         songTitle->setStyleSheet("color: #F8FAFC;font-size: 16px; font-weight: bold; border:none;"
                                  "background:transparent;");
 
@@ -63,8 +74,41 @@ void ResultsPage::displayRecommendations(std::vector<Song> songs, double execTim
         songDetails->addWidget(songTitle);
         songDetails->addWidget(artist);
 
+        //adds album to results page for each song
+        QLabel* album = new QLabel(QString::fromStdString(song.albumName),songCard);
+        album->setStyleSheet("color: #B6ACA0; font-size:12px; background: transparent; border:none;");
+        songDetails->addWidget(album);
+
         cards->addWidget(cardIcon);
         cards->addLayout(songDetails,1);
+
+        //adding favorite button for users to save their favorite songs
+        QPushButton* favoriteButton = new QPushButton("Save", songCard);
+        favoriteButton->setStyleSheet("background-color: #F59E0B;""color: black;""font-size: 14px;""border-radius: 6px;""padding: 8px;");
+        cards->addWidget(favoriteButton);
+
+        //check if song is favorite and change text on button to saved
+        if(favorites.isFavorite(song)){
+            favoriteButton->setText("Saved");
+        }
+
+        //connect button to favorites class
+        connect(favoriteButton, &QPushButton::clicked, [this, favoriteButton, song]() {
+            if (favorites.isFavorite(song)) {
+
+                //remove from favorites if alreayd there
+                favoriteButton->setText("Save");
+                favorites.removeFavorite(song);
+                
+            } 
+            //add to favorites if not already there
+            else {
+                favorites.addFavorite(song);
+                favoriteButton->setText("Saved");
+            }
+        });
+
+
         listLayout->addWidget(songCard);
     }
 

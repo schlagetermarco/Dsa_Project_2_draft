@@ -8,6 +8,7 @@ add_executable(Project
         main.cpp
         MaxHeap.cpp
         MaxHeap.h
+
         Song.h
         MergeSort.cpp
         MergeSort.h
@@ -23,8 +24,10 @@ add_executable(Project
         DiscoverPage.h
         ResultsPage.cpp
         ResultsPage.h
-        SimilarSongsPage.cpp
-        SimilarSongsPage.h
         HybridSearchPage.cpp
-        HybridSearchPage.h)
+        HybridSearchPage.h
+        Favorites.cpp
+        Favorites.h
+        SimilarSongsPage.cpp
+        SimilarSongsPage.h)
 target_link_libraries(Project PRIVATE Qt6::Widgets)

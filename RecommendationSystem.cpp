@@ -3,6 +3,7 @@
 
 using namespace std;
 
+//calculates the recommendation score based on all factors
 double RecommendationSystem::parameterRecommendationScore(const Song &song, const std::string &genre,
     const std::string &mood, double danceability, bool explicitSong) {
 
@@ -10,13 +11,14 @@ double RecommendationSystem::parameterRecommendationScore(const Song &song, cons
         return -1.0;
     }
 
-
+    
     double genreScore = 1.0;
     double danceabilityScore = 1.0;
     double moodScore = 1.0;
     double popularityScore = song.popularity/100.00;
     double recommendedScore=0.0;
 
+    
     if (genre != "Any" && !genre.empty()) {
         if (genre == song.track_genre) {
             genreScore = 1.0;
@@ -50,11 +52,12 @@ double RecommendationSystem::parameterRecommendationScore(const Song &song, cons
 }
 
 
-
+//calculates score based on similarity to song that was liked
 double RecommendationSystem::similarityRecommendationScore(const Song &song, const Song &likedSong, bool explicitSong) {
     if (!explicitSong && song.explicitSong) {
         return -1.0;
     }
+
 
     double danceabilityScore = 1.0-abs(likedSong.danceability-song.danceability);
     double energyScore= 1.0-abs(likedSong.energy-song.energy);
@@ -97,6 +100,7 @@ double RecommendationSystem::similarityRecommendationScore(const Song &song, con
     return recommendedScore;
 }
 
+//combines both parameter score and similarity score into one.  Averaages them.
 double RecommendationSystem::hybridRecommendationScore(const Song &song, const Song &likedSong,
     const std::string &genre, const std::string &mood, double danceability, bool explicitSong) {
     double paramScore = parameterRecommendationScore(song,genre,mood,danceability,explicitSong);

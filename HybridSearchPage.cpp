@@ -17,10 +17,11 @@
 
 using namespace std;
 
+//hybrid search page constructor
 HybridSearchPage::HybridSearchPage(const std::vector<Song> &songList, ResultsPage *resultspage, QStackedWidget *pages,
     QWidget *parent): QWidget(parent),songs(songList) {
 
-
+    //setup for layout and spacing
     QVBoxLayout* HybridSongLayout = new QVBoxLayout(this);
     HybridSongLayout->setContentsMargins(25,25,25,25);
     HybridSongLayout->setSpacing(12);
@@ -48,6 +49,7 @@ HybridSearchPage::HybridSearchPage(const std::vector<Song> &songList, ResultsPag
     matchingSongs->addItem("Select a song");
     HybridSongLayout->addWidget(matchingSongs);
 
+    //connects search bar to combo list
     connect(searchSong, &QLineEdit::textChanged,this,[this,matchingSongs](const QString &text){
         matchingSongs->clear();
         matchingSongs->addItem("Select a song");
@@ -55,12 +57,14 @@ HybridSearchPage::HybridSearchPage(const std::vector<Song> &songList, ResultsPag
             return;
         }
 
+        //searches songs that match the input of the user.
         int matches = 0;
         for (int i = 0; i < songs.size(); ++i) {
             const Song &song = songs[i];
             QString songTitle = QString::fromStdString(song.trackName);
             QString songArtist = QString::fromStdString(song.artistName);
 
+            //if title or name contains text, add it to the box
             if (songTitle.contains(text, Qt::CaseInsensitive)|| songArtist.contains(text, Qt::CaseInsensitive)) {
                 matchingSongs->addItem(songTitle+" - "+songArtist,i);
                 matches++;
@@ -71,6 +75,7 @@ HybridSearchPage::HybridSearchPage(const std::vector<Song> &songList, ResultsPag
         }
     });
 
+    //connects combo box to song select
     connect(matchingSongs, &QComboBox::currentIndexChanged,this,[this,matchingSongs](int index) {
         if (index <= 0) {
             return;
@@ -80,6 +85,7 @@ HybridSearchPage::HybridSearchPage(const std::vector<Song> &songList, ResultsPag
         userSong = songs[chosenSong];
     });
 
+    //adds different selections
     QLabel* genre = new QLabel("Genre",this);
     QComboBox* genreSelection = new QComboBox(this);
     genreSelection->addItems({"Any","Pop","Rock","Hip-Hop","Rap","Country","Electronic",
@@ -131,6 +137,8 @@ HybridSearchPage::HybridSearchPage(const std::vector<Song> &songList, ResultsPag
     recommendButton->setCursor(Qt::PointingHandCursor);
     HybridSongLayout->addWidget(recommendButton);
     HybridSongLayout->addStretch();
+
+    //page styling
     setStyleSheet("QLabel{ color:#F8FAFC; background:transparent}"
 
                   "QComboBox{background-color:#21190F;color:#F8FAFC; border: 1px solid rgba(245,158,11,90);"
@@ -152,6 +160,7 @@ HybridSearchPage::HybridSearchPage(const std::vector<Song> &songList, ResultsPag
 
                   "QPushButton:hover{background-color: #FBBF24}");
 
+    //connect button to recommendation
     connect(recommendButton, &QPushButton::clicked, this,[this,matchingSongs,explicitSongs,
         songCountSelection,adtSelection,genreSelection, moodSelection,
         danceabilitySlider,resultspage,pages]() {
@@ -162,6 +171,7 @@ HybridSearchPage::HybridSearchPage(const std::vector<Song> &songList, ResultsPag
             return;
         }
 
+        //make vector of recommendations
         bool includeExplicitSongs = explicitSongs->isChecked();
         QString adt = adtSelection->currentText();
         string genre = genreSelection->currentText().toStdString();
@@ -191,6 +201,7 @@ HybridSearchPage::HybridSearchPage(const std::vector<Song> &songList, ResultsPag
        vector<Song> recommendations;
         auto start = chrono::high_resolution_clock::now();
 
+        //checks for which algorithm the user selected and uses that one
        if (adt=="MaxHeap") {
            MaxHeap topSongs;
            for (const Song& song : possibleRecommendations) {
