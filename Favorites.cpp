@@ -15,9 +15,11 @@ void Favorites::saveFavorites() const {
     
     else{
         for(int i=0; i<favoriteSongs.size(); i++){
-            file << favoriteSongs[i].trackID << "," << favoriteSongs[i].artistName << "," << favoriteSongs[i].albumName << "," << favoriteSongs[i].trackName << endl;
+            file << favoriteSongs[i].trackID << endl;
+            file << favoriteSongs[i].artistName << endl;
+            file << favoriteSongs[i].albumName << endl;
+            file << favoriteSongs[i].trackName << endl;
         }
-
     file.close();
     }
 
@@ -32,14 +34,14 @@ void Favorites::loadFavorites() {
 
     //reads every line and puts everything in a vector
     Song song1;
-    while (getline(file, song1.trackID, ',')) {
+    while (getline(file, song1.trackID)) {
         if(!getline(file, song1.artistName)){
             break;
         }
-        if(!getline(file, song1.albumName, ',')){
+        if(!getline(file, song1.albumName)){
             break;
         }
-        if(!getline(file, song1.trackName, ',')){
+        if(!getline(file, song1.trackName)){
             break;
         }
 

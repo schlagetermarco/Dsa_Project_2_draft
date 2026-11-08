@@ -51,4 +51,12 @@ Sidebar::Sidebar(QWidget *parent):QWidget(parent) {
     hybridSearchButton->setFixedHeight(42);
     hybridSearchButton->setStyleSheet(buttonStyle);
     sideBarLayout->addWidget(hybridSearchButton);
+
+    QPushButton* favoritesButton= new QPushButton("Favorites", this);
+    favoritesButton->setFixedHeight(42);
+    favoritesButton->setStyleSheet(buttonStyle);
+    sideBarLayout->addWidget(favoritesButton);
+    
+
+
 }
